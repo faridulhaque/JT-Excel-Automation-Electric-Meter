@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body: TMeterData = await request.json();
+
     const balance = await fetchMeterBalance(body.meterNo);
 
     const created = await prisma.meter.create({
