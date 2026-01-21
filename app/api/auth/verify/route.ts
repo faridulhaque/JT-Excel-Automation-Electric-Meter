@@ -6,20 +6,26 @@ export async function POST(request: Request) {
   try {
     const body: Partial<TUser> = await request.json();
 
-    const find = await prisma.user.findFirst({
-      where: { email: body.email as string, password: body.password },
+    const updated = await prisma.user.update({
+      where: {
+        email: body.email,
+        code: body.code,
+      },
+      data: {
+        isVerified: true,
+      },
     });
 
-    if (find) {
+    if (updated?.isVerified) {
       return NextResponse.json({
         status: 200,
-        data: find,
+        data: updated,
         message: "Successfully logged in",
       });
     } else {
       return NextResponse.json({
         status: 400,
-        message: "Invalid email or password",
+        message: "Invalid code",
       });
     }
   } catch (error) {
