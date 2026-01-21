@@ -10,5 +10,10 @@ export type TMeterData = {
   user: TUser;
   meterNo: string;
   threshold: number;
-  id: string
+  id: string;
+};
+
+export type SignUpPayload = {
+  email: string;
+  password: string;
 };

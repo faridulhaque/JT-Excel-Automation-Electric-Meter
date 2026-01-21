@@ -20,6 +20,7 @@
     "pg": "^8.17.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-toastify": "^11.0.5",
     "tough-cookie": "^6.0.0"
   },
   "devDependencies": {
