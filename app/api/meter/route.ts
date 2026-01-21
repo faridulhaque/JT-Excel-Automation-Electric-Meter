@@ -32,3 +32,33 @@ export async function POST(request: Request) {
     });
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    const body: TMeterData = await request.json();
+
+
+
+    const updated = await prisma.meter.update({
+      where: {
+        id: body.id,
+      },
+      data: {
+        name: body.name,
+        threshold: body.threshold,
+        
+      },
+    });
+    if (updated)
+      NextResponse.json({
+        status: 200,
+        data: updated,
+        message: "Meter updated successfully",
+      });
+  } catch (error) {
+    return NextResponse.json({
+      status: 500,
+      message: "Internal server error",
+    });
+  }
+}
