@@ -9,7 +9,6 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -32,11 +31,10 @@ function VerifyForm() {
         className="mx-auto w-full max-w-md space-y-5"
       >
         <div>
-          <label className="block text-white text-sm mb-2">Email</label>
           <input
             type="text"
-            name="email"
-            placeholder="Enter your email"
+            name="code"
+            placeholder="Enter your code"
             className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
           />
         </div>
@@ -50,7 +48,7 @@ function VerifyForm() {
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">
-        <button className="text-[#94A3B8] hover:underline">Resend code</button>
+        <button className="text-[#94A3B8] hover:underline cursor-pointer">Resend code</button>
       </h2>
     </div>
   );
