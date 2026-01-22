@@ -13,6 +13,7 @@ export type TMeterData = {
   id: string;
 };
 
+export type TAddMeter = Pick<TMeterData, "name" | "threshold" | "meterNo">;
 export type SignUpPayload = {
   email: string;
   password: string;
@@ -30,4 +31,6 @@ export enum APIEndPoints {
   verify = "/api/auth/verify",
   resend = "/api/auth/resend",
   login = "/api/auth/login",
+
+  add_mater = '/api/meter/add'
 }

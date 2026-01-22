@@ -1,0 +1,120 @@
+"use client";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Noto_Serif } from "next/font/google";
+import { toast } from "react-toastify";
+import { postData } from "@/services/apis/auth";
+import { APIEndPoints, TAddMeter } from "@/services/types";
+const notoSerif = Noto_Serif({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
+function AddForm() {
+  const [userId, setUserId] = useState("");
+  const router = useRouter();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId") as string;
+    console.log("userId", userId);
+    if (!userId) return router.push("/auth/login");
+    const userEmail = localStorage.getItem("userEmail");
+    const isUserVerified = localStorage.getItem("isUserVerified");
+    console.log("isuerverief", isUserVerified);
+    if (isUserVerified !== "true") {
+      return router.push(`/auth/verify?email=${userEmail}&login=1`);
+    }
+    setUserId(userId);
+  }, [router]);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const name = e.currentTarget.name.value as string;
+    const meterNo = e.currentTarget.password.value as string;
+    const threshold = e.currentTarget.password.value;
+
+    const payload = {
+      name,
+      meterNo,
+      threshold,
+    };
+
+    for (const key in payload) {
+      const value = payload[key as keyof typeof payload];
+      if (!value) return toast.warn(`${key} is required`);
+    }
+
+    try {
+      const result = await postData<TAddMeter & { user: { id: string } }>(
+        APIEndPoints.add_mater,
+        {
+          ...payload,
+          user: {
+            id: userId,
+          },
+        },
+      );
+      if (result.status === 201) {
+        toast.success(result.message);
+
+        router.push("/");
+      } else toast.error(result.message);
+    } catch (error: any) {
+      toast.error(error.message || "Internal Server error");
+    }
+  };
+
+  return (
+    <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">
+      <h2
+        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+      >
+        Add a new meter
+      </h2>
+      <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
+        Enter your meter information
+      </p>
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto w-full max-w-md space-y-5"
+      >
+        <div>
+          <label className="block text-white text-sm mb-2">Name</label>
+          <input
+            type="text"
+            name="email"
+            placeholder="Enter a name for your meter"
+            className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
+          />
+        </div>
+        <div>
+          <label className="block text-white text-sm mb-2">Meter No.</label>
+          <input
+            type="text"
+            name="meterNo"
+            placeholder="Enter your meter no."
+            className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
+          />
+        </div>
+        <div>
+          <label className="block text-white text-sm mb-2">Threshold</label>
+          <input
+            type="text"
+            name="threshold"
+            placeholder="Enter minimum balance to get notified"
+            className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
+          />
+        </div>
+
+        <button
+          // disabled={loggingIn}
+          type="submit"
+          className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default AddForm;

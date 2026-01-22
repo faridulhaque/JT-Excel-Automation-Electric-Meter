@@ -12,7 +12,6 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleSubmit = async (e: any) => {
@@ -25,11 +24,11 @@ function VerifyForm() {
 
     try {
       const result = await postData(APIEndPoints.verify, { email, code });
-      console.log("result", result);
       if (result.status === 200) {
         toast.success(result.message);
         localStorage.setItem("userId", result?.data?.id);
         localStorage.setItem("isUserVerified", result?.data?.isVerified);
+        localStorage.setItem("userEmail", result?.data?.email);
         router.push("/");
       } else {
         toast.error(result.message);
@@ -38,7 +37,6 @@ function VerifyForm() {
   };
 
   const handleResend = async () => {
-    
     const email = searchParams.get("email");
     if (!email) return toast.error("Try logging or register again");
     const result = await postData<{ email: string }>(APIEndPoints.resend, {
@@ -57,7 +55,9 @@ function VerifyForm() {
       <h2
         className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
-        Verify Code
+        {searchParams.get("login") === "1"
+          ? "You must verify your email before processing"
+          : "Verify to continue"}
       </h2>
       <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
         Enter the 4 digit code you have received in your email!

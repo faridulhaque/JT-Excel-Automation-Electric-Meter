@@ -44,8 +44,8 @@ function LoginForm() {
         toast.success(result.message);
         localStorage.setItem("userId", result?.data?.id);
         localStorage.setItem("isUserVerified", result?.data?.isVerified);
-        console.log('reulst', result)
-        router.push("/")
+        localStorage.setItem("userEmail", result.data.email);
+        router.push("/");
       } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign In`);
