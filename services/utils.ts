@@ -2,7 +2,6 @@ import { nescoCookieJar, nescoHttpClient } from "@/lib/nescoHttpClient";
 import { TUser } from "./types";
 import * as cheerio from "cheerio";
 
-
 export const sendMail = async (email: string, code: string) => {
   console.log("email", email);
   const publicKey = process.env.MAILJET_PUBLIC_KEY;
@@ -34,23 +33,60 @@ export const sendMail = async (email: string, code: string) => {
     }),
   });
 
-
   if (response.ok) return true;
   else return false;
 };
 
+export const sendMailWithNotification = async (
+  email: string,
+  balance: string,
+) => {
+  const publicKey = process.env.MAILJET_PUBLIC_KEY;
+  const privateKey = process.env.MAILJET_PRIVATE_KEY;
+  const senderEmail = process.env.MAILJET_SENDER_EMAIL;
+  const auth = Buffer.from(`${publicKey}:${privateKey}`).toString("base64");
 
+  const response = await fetch("https://api.mailjet.com/v3.1/send", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${auth}`,
+    },
+    body: JSON.stringify({
+      Messages: [
+        {
+          From: {
+            Email: senderEmail,
+            Name: "Excel Automation Pro E-Meter Support",
+          },
+          To: [{ Email: email, Name: "User" }],
+          Subject: "Your meter balance is low",
+          TextPart: `You are running out of balance!`,
+          HTMLPart: `<h3>Hello ${"User"},</h3>
+                       <p>Your meter balance is only ${balance} </b>.</p>
+                       <p>Please recharge soon</p>`,
+        },
+      ],
+    }),
+  });
+  if (response.ok) return true;
+  else return false;
+};
 
-export const fetchMeterBalance = async (customer_no: string): Promise<string | null> => {
-
-
-  const getRes = await nescoHttpClient.get("https://customer.nesco.gov.bd/pre/panel");
+export const fetchMeterBalance = async (
+  customer_no: string,
+): Promise<string | null> => {
+  const getRes = await nescoHttpClient.get(
+    "https://customer.nesco.gov.bd/pre/panel",
+  );
 
   const $get = cheerio.load(getRes.data);
   const token = $get('input[name="_token"]').val() as string;
 
-  const cookies = await nescoCookieJar.getCookies("https://customer.nesco.gov.bd");
-  const xsrf = cookies.find(c => c.key === "XSRF-TOKEN")?.value as string;
+  const cookies = await nescoCookieJar.getCookies(
+    "https://customer.nesco.gov.bd",
+  );
+  const xsrf = cookies.find((c) => c.key === "XSRF-TOKEN")?.value as string;
 
   const body = new URLSearchParams({
     _token: token,
@@ -65,20 +101,23 @@ export const fetchMeterBalance = async (customer_no: string): Promise<string | n
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "User-Agent": "Mozilla/5.0",
-        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        Accept:
+          "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "X-XSRF-TOKEN": decodeURIComponent(xsrf),
         Referer: "https://customer.nesco.gov.bd/pre/panel",
         Origin: "https://customer.nesco.gov.bd",
       },
-    }
+    },
   );
 
   const $post = cheerio.load(postRes.data || "");
 
   return (
-    ($post('label:contains("অবশিষ্ট ব্যালেন্স")')
-      .next("div")
-      .find("input")
-      .val() as string | undefined)?.trim() ?? null
+    (
+      $post('label:contains("অবশিষ্ট ব্যালেন্স")')
+        .next("div")
+        .find("input")
+        .val() as string | undefined
+    )?.trim() ?? null
   );
 };
