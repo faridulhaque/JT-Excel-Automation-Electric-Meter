@@ -6,7 +6,7 @@ import { Noto_Serif } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
@@ -43,12 +43,17 @@ function LoginForm() {
       if (result.status === 200 && result.token) {
         toast.success(result.message);
         localStorage.setItem("token", result?.token);
-        router.push('/')
+        router.push("/");
       } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign In`);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) return router.push("/");
+  }, []);
 
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">

@@ -31,5 +31,5 @@ export enum APIEndPoints {
   resend = "/api/auth/resend",
   login = "/api/auth/login",
 
-  add_mater = '/api/meter/add'
+  meter = "/api/meter",
 }

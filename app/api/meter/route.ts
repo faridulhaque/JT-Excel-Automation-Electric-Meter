@@ -16,13 +16,27 @@ export async function POST(request: Request) {
       token,
       process.env.JWT_SECRET as string,
     ) as { id: string };
+
     const body: TMeterData = await request.json();
+
+    const found = await prisma.meter.findFirst({
+      where: {
+        userId: id,
+        meterNo: body.meterNo,
+      },
+    });
+
+    if (found)
+      return NextResponse.json({
+        status: 403,
+        message: "Meter already exists for the user",
+      });
 
     const balance = await fetchMeterBalance(body.meterNo);
 
     if (balance === null)
       return NextResponse.json({
-        status: 400,
+        status: 404,
         message: "Invalid Meter Number",
       });
 
@@ -30,7 +44,7 @@ export async function POST(request: Request) {
       data: {
         name: body.name,
         meterNo: body.meterNo,
-        threshold: body.threshold,
+        threshold: Number(body.threshold),
         balance: Number(balance) ?? 0,
         user: {
           connect: { id },
@@ -38,11 +52,17 @@ export async function POST(request: Request) {
       },
     });
     if (created)
-      NextResponse.json({
+      return NextResponse.json({
         status: 201,
         data: created,
         message: "Meter created successfully",
       });
+    else {
+      return NextResponse.json({
+        status: 400,
+        message: "Failed to create a new meter info",
+      });
+    }
   } catch (error) {
     return NextResponse.json({
       status: 500,

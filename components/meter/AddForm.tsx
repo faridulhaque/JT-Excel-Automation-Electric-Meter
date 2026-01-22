@@ -18,8 +18,11 @@ function AddForm() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const name = e.currentTarget.name.value as string;
-    const meterNo = e.currentTarget.password.value as string;
-    const threshold = e.currentTarget.password.value;
+    const meterNo = e.currentTarget.meterNo.value as string;
+    const threshold = e.currentTarget.threshold.value;
+
+    if (Number(threshold) < 10)
+      return toast.error("Threshold can't be less than 10");
 
     const payload = {
       name,
@@ -33,21 +36,15 @@ function AddForm() {
     }
 
     try {
-      const result = await postMeter<TAddMeter & { user: { id: string } }>(
-        APIEndPoints.add_mater,
-        {
-          ...payload,
-          user: {
-            id: userId,
-          },
-        },
-      );
-      if (result.status === 201) {
-        toast.success(result.message);
+      const result = await postMeter<TAddMeter>(APIEndPoints.meter, payload);
+      console.log("result", result);
+      if (result?.status === 201) {
+        toast.success(result?.message);
 
         router.push("/");
-      } else toast.error(result.message);
+      } else toast.error(result?.message);
     } catch (error: any) {
+      console.log("error", error);
       toast.error(error.message || "Internal Server error");
     }
   };
@@ -70,7 +67,7 @@ function AddForm() {
           <label className="block text-white text-sm mb-2">Name</label>
           <input
             type="text"
-            name="email"
+            name="name"
             placeholder="Enter a name for your meter"
             className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
           />

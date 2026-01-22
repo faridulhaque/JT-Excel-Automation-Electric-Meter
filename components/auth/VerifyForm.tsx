@@ -5,7 +5,7 @@ import { getUser } from "@/services/apis/user";
 import { APIEndPoints } from "@/services/types";
 import { Noto_Serif } from "next/font/google";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
@@ -13,6 +13,7 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleSubmit = async (e: any) => {
@@ -35,6 +36,29 @@ function VerifyForm() {
     } catch (error) {}
   };
 
+  useEffect(() => {
+    try {
+      const run = async () => {
+        const data = await getUser();
+
+        if (data?.data) {
+          if (data.data.isVerified) {
+            router.push("/");
+            return;
+          } else {
+            setLoading(false);
+          }
+        } else {
+          router.push("/auth/login");
+        }
+      };
+
+      run();
+    } catch (error) {
+      router.push("/auth/login");
+    }
+  }, []);
+
   const handleResend = async () => {
     const data = await getUser();
     const result = await postData<{ email: string }>(APIEndPoints.resend, {
@@ -47,7 +71,7 @@ function VerifyForm() {
       toast.error(result.message);
     }
   };
-
+  if (loading) return <h2>Loading...</h2>;
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8 mx-auto">
       <h2
