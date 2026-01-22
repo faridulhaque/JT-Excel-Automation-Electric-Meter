@@ -1,6 +1,7 @@
 "use client";
 
 import { postData } from "@/services/apis/auth";
+import { getUser } from "@/services/apis/user";
 import { APIEndPoints } from "@/services/types";
 import { Noto_Serif } from "next/font/google";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -35,10 +36,9 @@ function VerifyForm() {
   };
 
   const handleResend = async () => {
-    const email = searchParams.get("email");
-    if (!email) return toast.error("Try logging or register again");
+    const data = await getUser();
     const result = await postData<{ email: string }>(APIEndPoints.resend, {
-      email: email as string,
+      email: data.data.email as string,
     });
 
     if (result.status === 201) {
