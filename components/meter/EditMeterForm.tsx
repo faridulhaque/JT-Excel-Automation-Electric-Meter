@@ -27,13 +27,14 @@ function EditMeterForm() {
     run();
   }, []);
 
-
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const name = e.currentTarget.name.value as string;
     const threshold = e.currentTarget.threshold.value;
     const meterNo = e.currentTarget.meterNo.value;
+
+    if (name.length > 15)
+      return toast.error("Name length must be less than 20");
 
     if (Number(threshold) < 10)
       return toast.error("Threshold can't be less than 10");

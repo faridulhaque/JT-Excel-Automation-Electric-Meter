@@ -21,6 +21,8 @@ function AddForm() {
     const meterNo = e.currentTarget.meterNo.value as string;
     const threshold = e.currentTarget.threshold.value;
 
+    if(name.length > 15) return toast.error('Name length must be less than 20')
+
     if (Number(threshold) < 10)
       return toast.error("Threshold can't be less than 10");
 
