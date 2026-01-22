@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import jsonwebtoken from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 
-async function GET(request: Request) {
+export async function GET(request: Request) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
@@ -19,6 +19,7 @@ async function GET(request: Request) {
       return NextResponse.json({
         status: 200,
         message: "user info retrieved successfully",
+        data: user,
       });
     }
   } catch (error) {

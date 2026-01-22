@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
@@ -22,6 +22,8 @@ export async function POST(request: Request) {
         id,
       },
     });
+
+    
 
     if (!found) {
       return NextResponse.json({
@@ -45,6 +47,7 @@ export async function POST(request: Request) {
       message: "Successfully verified",
     });
   } catch (error) {
+    console.log('error', error)
     return NextResponse.json({
       status: 500,
       message: "Internal server error",

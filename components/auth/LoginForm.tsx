@@ -43,6 +43,7 @@ function LoginForm() {
       if (result.status === 200 && result.token) {
         toast.success(result.message);
         localStorage.setItem("token", result?.token);
+        router.push('/')
       } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign In`);

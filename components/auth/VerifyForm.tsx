@@ -16,14 +16,12 @@ function VerifyForm() {
   const searchParams = useSearchParams();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    const email = searchParams.get("email");
     const code = e.target.code.value;
 
-    if (!email) return toast.error("Something went wrong");
     if (!code) return toast.error("Code is required");
 
     try {
-      const result = await postData(APIEndPoints.verify, { email, code });
+      const result = await postData(APIEndPoints.verify, { code });
       if (result.status === 200) {
         toast.success(result.message);
         localStorage.setItem("userId", result?.data?.id);
@@ -51,7 +49,7 @@ function VerifyForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">
+    <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8 mx-auto">
       <h2
         className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >

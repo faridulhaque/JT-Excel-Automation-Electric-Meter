@@ -1,9 +1,14 @@
-import React from 'react'
+import RequireAuth from "@/components/others/RequireAuth";
+import React from "react";
 
 function page() {
   return (
-    <div>page</div>
-  )
+    <RequireAuth>
+      <div className="min-h-screen flex items-center justify-center">
+      
+      </div>
+    </RequireAuth>
+  );
 }
 
-export default page
+export default page;

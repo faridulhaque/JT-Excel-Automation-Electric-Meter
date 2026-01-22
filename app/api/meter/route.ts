@@ -6,7 +6,7 @@ import jsonwebtoken from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
@@ -90,7 +90,7 @@ export async function PUT(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
@@ -114,18 +114,18 @@ export async function GET(request: Request) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
   try {
-    const token = request.headers.get("token");
+    const token = request.headers.get("authorization");
     if (!token)
       return NextResponse.json({
         status: 401,
         message: "Unauthorized",
       });
-    const { id } = jsonwebtoken.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as { id: string };
+    const { id } = params;
     const data = await prisma.meter.delete({ where: { id } });
 
     return NextResponse.json({

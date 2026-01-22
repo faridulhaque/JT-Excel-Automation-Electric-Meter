@@ -5,6 +5,7 @@ import { Noto_Serif } from "next/font/google";
 import { toast } from "react-toastify";
 import { postData } from "@/services/apis/auth";
 import { APIEndPoints, TAddMeter } from "@/services/types";
+import { postMeter } from "@/services/apis/meter";
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
@@ -13,18 +14,6 @@ const notoSerif = Noto_Serif({
 function AddForm() {
   const [userId, setUserId] = useState("");
   const router = useRouter();
-  useEffect(() => {
-    const userId = localStorage.getItem("userId") as string;
-    console.log("userId", userId);
-    if (!userId) return router.push("/auth/login");
-    const userEmail = localStorage.getItem("userEmail");
-    const isUserVerified = localStorage.getItem("isUserVerified");
-    console.log("isuerverief", isUserVerified);
-    if (isUserVerified !== "true") {
-      return router.push(`/auth/verify?email=${userEmail}&login=1`);
-    }
-    setUserId(userId);
-  }, [router]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -44,7 +33,7 @@ function AddForm() {
     }
 
     try {
-      const result = await postData<TAddMeter & { user: { id: string } }>(
+      const result = await postMeter<TAddMeter & { user: { id: string } }>(
         APIEndPoints.add_mater,
         {
           ...payload,
@@ -64,7 +53,7 @@ function AddForm() {
   };
 
   return (
-    <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">
+    <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8 mx-auto">
       <h2
         className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
