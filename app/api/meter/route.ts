@@ -2,9 +2,20 @@ import { prisma } from "@/lib/prisma";
 import { TMeterData } from "@/services/types";
 import { fetchMeterBalance } from "@/services/utils";
 import { NextResponse } from "next/server";
+import jsonwebtoken from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
+    const token = request.headers.get("token");
+    if (!token)
+      return NextResponse.json({
+        status: 401,
+        message: "Unauthorized",
+      });
+    const { id } = jsonwebtoken.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as { id: string };
     const body: TMeterData = await request.json();
 
     const balance = await fetchMeterBalance(body.meterNo);
@@ -22,7 +33,7 @@ export async function POST(request: Request) {
         threshold: body.threshold,
         balance: Number(balance) ?? 0,
         user: {
-          connect: { id: body.user.id },
+          connect: { id },
         },
       },
     });
@@ -42,6 +53,16 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    const token = request.headers.get("token");
+    if (!token)
+      return NextResponse.json({
+        status: 401,
+        message: "Unauthorized",
+      });
+    const { id } = jsonwebtoken.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as { id: string };
     const body: TMeterData = await request.json();
 
     const updated = await prisma.meter.update({
@@ -67,12 +88,18 @@ export async function PUT(request: Request) {
   }
 }
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function GET(request: Request) {
   try {
-    const { id } = params;
+    const token = request.headers.get("token");
+    if (!token)
+      return NextResponse.json({
+        status: 401,
+        message: "Unauthorized",
+      });
+    const { id } = jsonwebtoken.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as { id: string };
     const data = await prisma.meter.findMany({ where: { id } });
     return NextResponse.json({
       status: 200,
@@ -87,12 +114,18 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request) {
   try {
-    const { id } = params;
+    const token = request.headers.get("token");
+    if (!token)
+      return NextResponse.json({
+        status: 401,
+        message: "Unauthorized",
+      });
+    const { id } = jsonwebtoken.verify(
+      token,
+      process.env.JWT_SECRET as string,
+    ) as { id: string };
     const data = await prisma.meter.delete({ where: { id } });
 
     return NextResponse.json({

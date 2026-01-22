@@ -44,9 +44,10 @@ function RegisterForm() {
         email,
         password,
       });
-      if (result.status === 201) {
+      if (result.status === 201 && result.token) {
         toast.success(result.message);
-        router.push(`/auth/verify?email=${result?.data?.email}`);
+        localStorage.setItem("token", result.token);
+        router.push(`/auth/verify`);
       } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign Up`);

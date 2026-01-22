@@ -1,17 +1,25 @@
 import { prisma } from "@/lib/prisma";
 import { TUser } from "@/services/types";
 import { NextResponse } from "next/server";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
+    const token = request.headers.get("token");
+    if (!token)
+      return NextResponse.json({
+        status: 401,
+        message: "Unauthorized",
+      });
+    const { id } = jwt.verify(token, process.env.JWT_SECRET as string) as {
+      id: string;
+    };
     const body: Partial<TUser> = await request.json();
 
-    console.log("body", body);
     const found = await prisma.user.findFirst({
       where: {
-        email: body.email,
         code: body.code,
+        id,
       },
     });
 
@@ -31,17 +39,10 @@ export async function POST(request: Request) {
       },
     });
 
-    const token = jwt.sign(
-      { id: updated.id },
-      process.env.JWT_SECRET as string,
-      { expiresIn: "1y" },
-    );
-
     return NextResponse.json({
       status: 200,
       data: updated,
       message: "Successfully verified",
-      token
     });
   } catch (error) {
     return NextResponse.json({

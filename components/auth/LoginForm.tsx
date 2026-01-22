@@ -40,12 +40,9 @@ function LoginForm() {
         email,
         password,
       });
-      if (result.status === 200) {
+      if (result.status === 200 && result.token) {
         toast.success(result.message);
-        localStorage.setItem("userId", result?.data?.id);
-        localStorage.setItem("isUserVerified", result?.data?.isVerified);
-        localStorage.setItem("userEmail", result.data.email);
-        router.push("/");
+        localStorage.setItem("token", result?.token);
       } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign In`);

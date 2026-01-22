@@ -7,7 +7,6 @@ export type TUser = {
 
 export type TMeterData = {
   name: string;
-  user: TUser;
   meterNo: string;
   threshold: number;
   id: string;
