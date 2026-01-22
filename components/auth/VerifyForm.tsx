@@ -15,7 +15,7 @@ const notoSerif = Noto_Serif({
 function VerifyForm() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const searchParams = useSearchParams();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const code = e.target.code.value;
@@ -77,9 +77,7 @@ function VerifyForm() {
       <h2
         className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
-        {searchParams.get("login") === "1"
-          ? "You must verify your email before processing"
-          : "Verify to continue"}
+        You must verify your email before processing further
       </h2>
       <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
         Enter the 4 digit code you have received in your email!
