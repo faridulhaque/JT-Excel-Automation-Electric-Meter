@@ -17,3 +17,15 @@ export type SignUpPayload = {
   email: string;
   password: string;
 };
+
+export enum Methods {
+  GET = "GET",
+  POST = "POST",
+  PUT = "PUT",
+  DELETE = "DELETE",
+}
+
+export enum APIEndPoints {
+  register = "/api/auth/register",
+  verify = "/api/auth/verify",
+}

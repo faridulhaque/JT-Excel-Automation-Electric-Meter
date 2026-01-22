@@ -9,6 +9,12 @@ export async function POST(request: Request) {
 
     const balance = await fetchMeterBalance(body.meterNo);
 
+    if (balance === null)
+      return NextResponse.json({
+        status: 400,
+        message: "Invalid Meter Number",
+      });
+
     const created = await prisma.meter.create({
       data: {
         name: body.name,
@@ -88,7 +94,7 @@ export async function DELETE(
   try {
     const { id } = params;
     const data = await prisma.meter.delete({ where: { id } });
-    
+
     return NextResponse.json({
       status: 200,
       data: data,

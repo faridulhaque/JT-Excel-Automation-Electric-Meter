@@ -6,10 +6,14 @@ export async function GET(request: Request) {
   //   if (request.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
   //     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   //   }
-  // const balance = await fetchMeterBalance('32016975');
+  try {
+    const balance = await fetchMeterBalance("12343435");
+    console.log("balance", balance);
+  } catch (error) {
+    console.log("error", error);
+  }
 
   // console.log("CRON HIT", new Date().toISOString());
-  // console.log("balance", balance)
 
   return NextResponse.json({ ok: true });
 }

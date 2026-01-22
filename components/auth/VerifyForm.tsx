@@ -1,6 +1,9 @@
 "use client";
 
+import { postData } from "@/services/apis/auth";
+import { APIEndPoints } from "@/services/types";
 import { Noto_Serif } from "next/font/google";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 const notoSerif = Noto_Serif({
@@ -9,10 +12,27 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const email = searchParams.get("email");
+    const code = e.target.code.value;
+
+    if (!email) return toast.error("Something went wrong");
+    if (!code) return toast.error("Code is required");
 
     try {
+      const result = await postData(APIEndPoints.verify, { email, code });
+      console.log('result', result)
+      if (result.status === 200) {
+        toast.success(result.message);
+        localStorage.setItem("userId", result?.data?.id);
+        localStorage.setItem("isUserVerified", result?.data?.isVerified);
+        router.push("/");
+      } else {
+        toast.error(result.message);
+      }
     } catch (error) {}
   };
 
@@ -48,7 +68,9 @@ function VerifyForm() {
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">
-        <button className="text-[#94A3B8] hover:underline cursor-pointer">Resend code</button>
+        <button className="text-[#94A3B8] hover:underline cursor-pointer">
+          Resend code
+        </button>
       </h2>
     </div>
   );

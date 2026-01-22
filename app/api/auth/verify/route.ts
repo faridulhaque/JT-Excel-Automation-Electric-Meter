@@ -6,28 +6,35 @@ export async function POST(request: Request) {
   try {
     const body: Partial<TUser> = await request.json();
 
-    const updated = await prisma.user.update({
+    console.log("body", body);
+    const found = await prisma.user.findFirst({
       where: {
         email: body.email,
         code: body.code,
+      },
+    });
+
+    if (!found) {
+      return NextResponse.json({
+        status: 400,
+        message: "Invalid code",
+      });
+    }
+
+    const updated = await prisma.user.update({
+      where: {
+        id: found.id,
       },
       data: {
         isVerified: true,
       },
     });
 
-    if (updated?.isVerified) {
-      return NextResponse.json({
-        status: 200,
-        data: updated,
-        message: "Successfully logged in",
-      });
-    } else {
-      return NextResponse.json({
-        status: 400,
-        message: "Invalid code",
-      });
-    }
+    return NextResponse.json({
+      status: 200,
+      data: updated,
+      message: "Successfully logged in",
+    });
   } catch (error) {
     return NextResponse.json({
       status: 500,

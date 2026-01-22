@@ -1,6 +1,7 @@
 "use client";
 
-import { SignUpPayload } from "@/services/types";
+import { postData } from "@/services/apis/auth";
+import { APIEndPoints, SignUpPayload } from "@/services/types";
 import { Noto_Serif } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,6 +40,14 @@ function RegisterForm() {
     }
 
     try {
+      const result = await postData<SignUpPayload>(APIEndPoints.register, {
+        email,
+        password,
+      });
+      if (result.status === 201) {
+        toast.success(result.message);
+        router.push(`/auth/verify?email=${result?.data?.email}`);
+      } else toast.error(result.message);
     } catch (error) {
       toast.error(`Failed to Sign Up`);
     }
@@ -58,7 +67,6 @@ function RegisterForm() {
         onSubmit={handleSubmit}
         className="mx-auto w-full max-w-md space-y-5"
       >
-   
         <div>
           <label className="block text-white text-sm mb-2">Email</label>
           <input
