@@ -36,12 +36,21 @@ function LoginForm() {
     }
 
     try {
+      const result = await postData<SignUpPayload>(APIEndPoints.login, {
+        email,
+        password,
+      });
+      if (result.status === 200) {
+        toast.success(result.message);
+        localStorage.setItem("userId", result?.data?.id);
+        localStorage.setItem("isUserVerified", result?.data?.isVerified);
+        console.log('reulst', result)
+        router.push("/")
+      } else toast.error(result.message);
     } catch (error) {
-      toast.error(`Failed to Sign Up`);
+      toast.error(`Failed to Sign In`);
     }
   };
-
- 
 
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">
@@ -118,7 +127,6 @@ function LoginForm() {
           </button>
         </div>
 
-      
         <button
           // disabled={loggingIn}
           type="submit"
