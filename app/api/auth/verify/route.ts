@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { TUser } from "@/services/types";
 import { NextResponse } from "next/server";
+import jwt from 'jsonwebtoken'
 
 export async function POST(request: Request) {
   try {
@@ -30,10 +31,17 @@ export async function POST(request: Request) {
       },
     });
 
+    const token = jwt.sign(
+      { id: updated.id },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1y" },
+    );
+
     return NextResponse.json({
       status: 200,
       data: updated,
       message: "Successfully verified",
+      token
     });
   } catch (error) {
     return NextResponse.json({

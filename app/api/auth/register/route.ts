@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { TUser } from "@/services/types";
 import { sendMail } from "@/services/utils";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
@@ -35,12 +36,19 @@ export async function POST(request: Request) {
           isVerified: false,
         },
       });
-      if (created.id)
+      if (created.id) {
+        const token = jwt.sign(
+          { id: created.id },
+          process.env.JWT_SECRET as string,
+          { expiresIn: "1y" },
+        );
         return NextResponse.json({
           status: 201,
           data: created,
+          token,
           message: "An email has been sent with verification code",
         });
+      }
     }
   } catch (error) {
     return NextResponse.json({

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { TUser } from "@/services/types";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
@@ -11,9 +12,15 @@ export async function POST(request: Request) {
     });
 
     if (find) {
+      const token = jwt.sign(
+        { id: find.id },
+        process.env.JWT_SECRET as string,
+        { expiresIn: "1y" },
+      );
       return NextResponse.json({
         status: 200,
         data: find,
+        token,
         message: "Successfully logged in",
       });
     } else {
