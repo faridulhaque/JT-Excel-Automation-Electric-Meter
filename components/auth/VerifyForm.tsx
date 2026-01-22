@@ -12,6 +12,7 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleSubmit = async (e: any) => {
@@ -24,7 +25,7 @@ function VerifyForm() {
 
     try {
       const result = await postData(APIEndPoints.verify, { email, code });
-      console.log('result', result)
+      console.log("result", result);
       if (result.status === 200) {
         toast.success(result.message);
         localStorage.setItem("userId", result?.data?.id);
@@ -34,6 +35,21 @@ function VerifyForm() {
         toast.error(result.message);
       }
     } catch (error) {}
+  };
+
+  const handleResend = async () => {
+    
+    const email = searchParams.get("email");
+    if (!email) return toast.error("Try logging or register again");
+    const result = await postData<{ email: string }>(APIEndPoints.resend, {
+      email: email as string,
+    });
+
+    if (result.status === 201) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (
@@ -68,7 +84,11 @@ function VerifyForm() {
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">
-        <button className="text-[#94A3B8] hover:underline cursor-pointer">
+        <button
+          type="button"
+          onClick={handleResend}
+          className="text-[#94A3B8] hover:underline cursor-pointer"
+        >
           Resend code
         </button>
       </h2>

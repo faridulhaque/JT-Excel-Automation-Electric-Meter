@@ -1,6 +1,7 @@
 "use client";
 
-import { SignUpPayload } from "@/services/types";
+import { postData } from "@/services/apis/auth";
+import { APIEndPoints, SignUpPayload } from "@/services/types";
 import { Noto_Serif } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,6 +40,8 @@ function LoginForm() {
       toast.error(`Failed to Sign Up`);
     }
   };
+
+ 
 
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8">

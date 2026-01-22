@@ -28,4 +28,6 @@ export enum Methods {
 export enum APIEndPoints {
   register = "/api/auth/register",
   verify = "/api/auth/verify",
+  resend = "/api/auth/resend",
+  login = "/api/auth/login",
 }
