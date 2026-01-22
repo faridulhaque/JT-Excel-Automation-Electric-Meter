@@ -1,33 +1,48 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Noto_Serif } from "next/font/google";
 import { toast } from "react-toastify";
 import { postData } from "@/services/apis/auth";
-import { APIEndPoints, TAddMeter } from "@/services/types";
-import { postMeter } from "@/services/apis/meter";
+import { APIEndPoints, TAddMeter, TMeterData } from "@/services/types";
+import { getMeter, postMeter, updateMeter } from "@/services/apis/meter";
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
 });
 
-function AddForm() {
- 
+function EditMeterForm() {
+  const [meter, setMeter] = useState<TMeterData | null>(null);
   const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    const run = async () => {
+      if (params?.id) {
+        const result = await getMeter(APIEndPoints.meter, params?.id as string);
+
+        setMeter(result.data);
+      }
+    };
+    run();
+  }, []);
+
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const name = e.currentTarget.name.value as string;
-    const meterNo = e.currentTarget.meterNo.value as string;
     const threshold = e.currentTarget.threshold.value;
+    const meterNo = e.currentTarget.meterNo.value;
 
     if (Number(threshold) < 10)
       return toast.error("Threshold can't be less than 10");
 
     const payload = {
       name,
-      meterNo,
       threshold,
+      meterNo,
+      id: params?.id,
     };
 
     for (const key in payload) {
@@ -36,9 +51,12 @@ function AddForm() {
     }
 
     try {
-      const result = await postMeter<TAddMeter>(APIEndPoints.meter, payload);
-      console.log("result", result);
-      if (result?.status === 201) {
+      const result = await updateMeter<Omit<TAddMeter, "meterNo">>(
+        APIEndPoints.meter,
+        payload,
+      );
+
+      if (result?.status === 200) {
         toast.success(result?.message);
 
         router.push("/");
@@ -54,10 +72,10 @@ function AddForm() {
       <h2
         className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
-        Add a new meter
+        Update meter info
       </h2>
       <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
-        Enter your meter information
+        Update your meter information
       </p>
       <form
         onSubmit={handleSubmit}
@@ -69,22 +87,26 @@ function AddForm() {
             type="text"
             name="name"
             placeholder="Enter a name for your meter"
+            defaultValue={meter?.name}
             className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
           />
         </div>
         <div>
           <label className="block text-white text-sm mb-2">Meter No.</label>
           <input
-            type="number"
+            defaultValue={meter?.meterNo}
+            disabled
+            type="text"
             name="meterNo"
             placeholder="Enter your meter no."
-            className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
+            className="w-full h-12 rounded-lg bg-[#6B6B6B] border border-[#6B6B6B] px-4 outline-0 text-black cursor-not-allowed"
           />
         </div>
         <div>
           <label className="block text-white text-sm mb-2">Threshold</label>
           <input
-            type="text"
+            defaultValue={meter?.threshold}
+            type="number"
             name="threshold"
             placeholder="Enter minimum balance to get notified"
             className="w-full h-12 rounded-lg bg-[#F5F7FA] border border-[#6B6B6B] px-4 outline-0 text-black"
@@ -103,4 +125,4 @@ function AddForm() {
   );
 }
 
-export default AddForm;
+export default EditMeterForm;

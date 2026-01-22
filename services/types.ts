@@ -10,6 +10,7 @@ export type TMeterData = {
   meterNo: string;
   threshold: number;
   id: string;
+  balance: number;
 };
 
 export type TAddMeter = Pick<TMeterData, "name" | "threshold" | "meterNo">;

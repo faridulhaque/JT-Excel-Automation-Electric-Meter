@@ -1,13 +1,15 @@
-import RequireAuth from "@/components/others/RequireAuth";
+import EditMeterForm from "@/components/meter/EditMeterForm";
+import Logout from "@/components/others/Logout";
 import React from "react";
 
 function page() {
   return (
-    <RequireAuth>
-      <div className="min-h-screen flex items-center justify-center">
-      
-      </div>
-    </RequireAuth>
+    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black relative">
+      <div className="h-20"></div>
+      <Logout></Logout>
+
+      <EditMeterForm></EditMeterForm>
+    </div>
   );
 }
 

@@ -79,10 +79,7 @@ export async function PUT(request: Request) {
         status: 401,
         message: "Unauthorized",
       });
-    const { id } = jsonwebtoken.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as { id: string };
+   
     const body: TMeterData = await request.json();
 
     const updated = await prisma.meter.update({
@@ -91,16 +88,17 @@ export async function PUT(request: Request) {
       },
       data: {
         name: body.name,
-        threshold: body.threshold,
+        threshold: Number(body.threshold),
       },
     });
     if (updated)
-      NextResponse.json({
+     return NextResponse.json({
         status: 200,
         data: updated,
         message: "Meter updated successfully",
       });
   } catch (error) {
+    console.log('error', error)
     return NextResponse.json({
       status: 500,
       message: "Internal server error",
@@ -120,7 +118,8 @@ export async function GET(request: Request) {
       token,
       process.env.JWT_SECRET as string,
     ) as { id: string };
-    const data = await prisma.meter.findMany({ where: { id } });
+
+    const data = await prisma.meter.findMany({ where: { userId: id } });
     return NextResponse.json({
       status: 200,
       data: data,
@@ -134,26 +133,26 @@ export async function GET(request: Request) {
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(request: Request) {
   try {
     const token = request.headers.get("authorization");
     if (!token)
-      return NextResponse.json({
-        status: 401,
-        message: "Unauthorized",
-      });
-    const { id } = params;
+      return NextResponse.json({ status: 401, message: "Unauthorized" });
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id)
+      return NextResponse.json({ status: 400, message: "id is required" });
+
     const data = await prisma.meter.delete({ where: { id } });
 
     return NextResponse.json({
       status: 200,
-      data: data,
+      data,
       message: "Data deleted successfully",
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({
       status: 500,
       message: "Internal server error",
