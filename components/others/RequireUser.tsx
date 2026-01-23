@@ -13,6 +13,8 @@ function RequireUser({ children }: { children: React.ReactNode }) {
       const run = async () => {
         const data = await getUser();
 
+        console.log("data", data);
+
         if (data?.data) {
           if (data.data.isVerified) {
             setLoading(false);
@@ -21,12 +23,14 @@ function RequireUser({ children }: { children: React.ReactNode }) {
           router.push("/auth/verify");
           return;
         }
-
+        localStorage.removeItem("token");
         router.push("/auth/login");
       };
 
       run();
     } catch (error) {
+      localStorage.removeItem("token");
+
       router.push("/auth/login");
     }
   }, []);

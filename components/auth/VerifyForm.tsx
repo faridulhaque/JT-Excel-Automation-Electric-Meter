@@ -49,6 +49,7 @@ function VerifyForm() {
             setLoading(false);
           }
         } else {
+          localStorage.removeItem('token')
           router.push("/auth/login");
         }
       };
