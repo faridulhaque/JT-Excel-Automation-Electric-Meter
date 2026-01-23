@@ -8,6 +8,7 @@ export async function GET(request: Request) {
       select: {
         id: true,
         meterNo: true,
+        name: true,
         threshold: true,
         user: {
           select: {
@@ -18,6 +19,8 @@ export async function GET(request: Request) {
       },
     });
 
+    console.log("meters count", meters.length);
+
     for (const m of meters) {
       const balance = await fetchMeterBalance(m.meterNo);
       if (!balance) return;
@@ -25,8 +28,10 @@ export async function GET(request: Request) {
         where: { id: m.id },
         data: { balance: Number(balance) },
       });
+      console.log("meter balance update");
       if (Number(balance) < m?.threshold) {
-        await sendMailWithNotification(m?.user?.email, balance);
+        await sendMailWithNotification(m?.user?.email, m?.name, balance);
+        console.log("mail sent to", m?.user?.email);
       }
     }
   } catch (error) {

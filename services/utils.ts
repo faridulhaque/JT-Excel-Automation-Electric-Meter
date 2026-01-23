@@ -39,6 +39,7 @@ export const sendMail = async (email: string, code: string) => {
 
 export const sendMailWithNotification = async (
   email: string,
+  meterName: string,
   balance: string,
 ) => {
   const publicKey = process.env.MAILJET_PUBLIC_KEY;
@@ -63,7 +64,7 @@ export const sendMailWithNotification = async (
           Subject: "Your meter balance is low",
           TextPart: `You are running out of balance!`,
           HTMLPart: `<h3>Hello ${"User"},</h3>
-                       <p>Your meter balance is only ${balance} </b>.</p>
+                       <p>Your meter ${meterName} balance is only ${balance} </b>.</p>
                        <p>Please recharge soon</p>`,
         },
       ],
