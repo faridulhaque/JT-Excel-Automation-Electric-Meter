@@ -58,7 +58,7 @@ Password: `test@faridmurshed.dev`
 
    npm install
 
-3. **Create a .env.local file and add:**
+3. **Create a .env file and add:**
 
 ```env
 
