@@ -89,9 +89,12 @@ NOTE: All environment variables are server-side only. Please do NOT prefix them 
 
    http://localhost:3000
 
-🧑‍🤝‍🧑 Author
+
+
+# 🧑‍🤝‍🧑 Author
 
 Faridul Haque Murshed
+
 https://github.com/faridulhaque
 
 ⭐ Please star this repo if you like it!
