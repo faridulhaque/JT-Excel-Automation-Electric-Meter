@@ -7,6 +7,7 @@ import { Noto_Serif } from "next/font/google";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Loading from "../others/Loading";
 const notoSerif = Noto_Serif({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
@@ -74,11 +75,11 @@ function VerifyForm() {
       toast.error(result.message);
     }
   };
-  if (loading) return <h2>Loading...</h2>;
+  if (loading) return <Loading></Loading>;
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8 mx-auto">
       <h2
-        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+        className={`text-xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
         You must verify your email before processing further
       </h2>
@@ -103,7 +104,7 @@ function VerifyForm() {
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          {verifyingCode ? "Verifying" : "Verify"}
+          {verifyingCode ? "Verifying..." : "Verify"}
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">

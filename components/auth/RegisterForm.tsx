@@ -199,7 +199,7 @@ function RegisterForm() {
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          {signingUp ? "Signing Up" : "Sign Up"}
+          {signingUp ? "Signing Up..." : "Sign Up"}
         </button>
       </form>
 

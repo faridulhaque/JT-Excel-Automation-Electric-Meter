@@ -141,7 +141,7 @@ function LoginForm() {
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          {loggingIn ? "Logging In" : "Log In"}
+          {loggingIn ? "Logging In..." : "Log In"}
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">
