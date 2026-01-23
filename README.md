@@ -2,7 +2,6 @@
 
 ## 🎥 Demo
 
-
 **Live Link:** https://jt-excel-automation-electric-meter.vercel.app/
 
 **Repository: (Frontend & Backend)** https://github.com/faridulhaque/Nesco-E-Meter-Dashboard
@@ -71,11 +70,16 @@ JWT_SECRET=
 
 ```
 
-NOTE: All environment variables are server-side only. Please do NOT prefix them with NEXT_PUBLIC_
+NOTE: All environment variables are server-side only. Please do NOT prefix them with NEXT*PUBLIC*
 
 4. **Run Migrations**
-   npx prisma migrate dev --name init
-   npx prisma generate
+
+```bash
+
+    npx prisma migrate dev --name init
+    npx prisma generate
+
+```
 
 5. **Run the development server**
 
