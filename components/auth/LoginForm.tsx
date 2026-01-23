@@ -14,6 +14,7 @@ const notoSerif = Noto_Serif({
 });
 
 function LoginForm() {
+  const [loggingIn, setLoggingIn] = useState(false);
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +37,7 @@ function LoginForm() {
     }
 
     try {
+      setLoggingIn(true);
       const result = await postData<SignUpPayload>(APIEndPoints.login, {
         email,
         password,
@@ -45,7 +47,11 @@ function LoginForm() {
         localStorage.setItem("token", result?.token);
         router.push("/");
       } else toast.error(result.message);
+
+      setLoggingIn(false);
     } catch (error) {
+      setLoggingIn(false);
+
       toast.error(`Failed to Sign In`);
     }
   };
@@ -131,11 +137,11 @@ function LoginForm() {
         </div>
 
         <button
-          // disabled={loggingIn}
+          disabled={loggingIn}
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          Login
+          {loggingIn ? "Logging In" : "Log In"}
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">

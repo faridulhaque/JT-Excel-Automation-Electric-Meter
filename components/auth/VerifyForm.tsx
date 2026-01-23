@@ -13,6 +13,7 @@ const notoSerif = Noto_Serif({
 });
 
 function VerifyForm() {
+  const [verifyingCode, setVerifyingCode] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -23,17 +24,18 @@ function VerifyForm() {
     if (!code) return toast.error("Code is required");
 
     try {
+      setVerifyingCode(true);
       const result = await postData(APIEndPoints.verify, { code });
       if (result.status === 200) {
         toast.success(result.message);
-        localStorage.setItem("userId", result?.data?.id);
-        localStorage.setItem("isUserVerified", result?.data?.isVerified);
-        localStorage.setItem("userEmail", result?.data?.email);
         router.push("/");
       } else {
         toast.error(result.message);
       }
-    } catch (error) {}
+      setVerifyingCode(false);
+    } catch (error) {
+      setVerifyingCode(false);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ function VerifyForm() {
             setLoading(false);
           }
         } else {
-          localStorage.removeItem('token')
+          localStorage.removeItem("token");
           router.push("/auth/login");
         }
       };
@@ -97,11 +99,11 @@ function VerifyForm() {
         </div>
 
         <button
-          // disabled={loggingIn}
+          disabled={verifyingCode}
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          Verify
+          {verifyingCode ? "Verifying" : "Verify"}
         </button>
       </form>
       <h2 className="text-center text-[#F5F7FA] text-base mt-6">

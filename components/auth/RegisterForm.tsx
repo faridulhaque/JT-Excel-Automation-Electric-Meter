@@ -15,6 +15,7 @@ const notoSerif = Noto_Serif({
 });
 
 function RegisterForm() {
+  const [signingUp, setSigningUp] = useState(false);
   const [showPass1, setShowPass1] = useState(false);
   const [showPass2, setShowPass2] = useState(false);
   const router = useRouter();
@@ -40,6 +41,7 @@ function RegisterForm() {
     }
 
     try {
+      setSigningUp(true);
       const result = await postData<SignUpPayload>(APIEndPoints.register, {
         email,
         password,
@@ -49,14 +51,17 @@ function RegisterForm() {
         localStorage.setItem("token", result.token);
         router.push(`/auth/verify`);
       } else toast.error(result.message);
+      setSigningUp(false);
     } catch (error) {
+      setSigningUp(false);
+
       toast.error(`Failed to Sign Up`);
     }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token) return router.push("/")
+    if (token) return router.push("/");
   }, []);
 
   return (
@@ -190,11 +195,11 @@ function RegisterForm() {
         </div>
 
         <button
-          //   disabled={registering}
+          disabled={signingUp}
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          Sign Up
+          {signingUp ? "Signing Up" : "Sign Up"}
         </button>
       </form>
 

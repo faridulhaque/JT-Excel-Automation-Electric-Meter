@@ -12,6 +12,7 @@ const notoSerif = Noto_Serif({
 });
 
 function EditMeterForm() {
+  const [updating, setUpdating] = useState(false);
   const [meter, setMeter] = useState<TMeterData | null>(null);
   const router = useRouter();
   const params = useParams();
@@ -52,6 +53,7 @@ function EditMeterForm() {
     }
 
     try {
+      setUpdating(true);
       const result = await updateMeter<Omit<TAddMeter, "meterNo">>(
         APIEndPoints.meter,
         payload,
@@ -62,7 +64,11 @@ function EditMeterForm() {
 
         router.push("/");
       } else toast.error(result?.message);
+
+      setUpdating(false);
     } catch (error: any) {
+      setUpdating(false);
+
       console.log("error", error);
       toast.error(error.message || "Internal Server error");
     }
@@ -115,11 +121,11 @@ function EditMeterForm() {
         </div>
 
         <button
-          // disabled={loggingIn}
+          disabled={updating}
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          Submit
+          {updating ? "Updating..." : "Submit"}
         </button>
       </form>
     </div>

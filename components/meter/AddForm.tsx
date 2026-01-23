@@ -12,8 +12,9 @@ const notoSerif = Noto_Serif({
 });
 
 function AddForm() {
- 
   const router = useRouter();
+
+  const [adding, setAdding] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -21,7 +22,8 @@ function AddForm() {
     const meterNo = e.currentTarget.meterNo.value as string;
     const threshold = e.currentTarget.threshold.value;
 
-    if(name.length > 15) return toast.error('Name length must be less than 20')
+    if (name.length > 15)
+      return toast.error("Name length must be less than 20");
 
     if (Number(threshold) < 10)
       return toast.error("Threshold can't be less than 10");
@@ -38,6 +40,8 @@ function AddForm() {
     }
 
     try {
+      setAdding(true);
+
       const result = await postMeter<TAddMeter>(APIEndPoints.meter, payload);
       console.log("result", result);
       if (result?.status === 201) {
@@ -45,7 +49,10 @@ function AddForm() {
 
         router.push("/");
       } else toast.error(result?.message);
+      setAdding(false);
     } catch (error: any) {
+      setAdding(false);
+
       console.log("error", error);
       toast.error(error.message || "Internal Server error");
     }
@@ -94,11 +101,11 @@ function AddForm() {
         </div>
 
         <button
-          // disabled={loggingIn}
+          disabled={adding}
           type="submit"
           className="cursor-pointer w-full h-12 bg-[#3B82F6] text-white rounded-md text-lg font-medium hover:bg-[#2563EB] transition"
         >
-          Submit
+          {adding ? "Adding..." : "Submit"}
         </button>
       </form>
     </div>
