@@ -1,6 +1,5 @@
 # 🗂️ NESCO Prepaid Meter Dashboard
 
-## 🎥 Demo
 
 **Live Link:** https://jt-excel-automation-electric-meter.vercel.app/
 
