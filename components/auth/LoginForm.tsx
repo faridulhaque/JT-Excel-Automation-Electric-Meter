@@ -64,11 +64,11 @@ function LoginForm() {
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md py-8 px-2">
       <h2
-        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+        className={`text-5xl md:text-6xl dark:text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
       >
         Welcome Back
       </h2>
-      <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
+      <p className="pt-4 pb-8 text-center text-lg dark:text-[#F8FAFC]">
         Enter your email and password to access your account
       </p>
       <form
@@ -76,7 +76,7 @@ function LoginForm() {
         className="mx-auto w-full max-w-md space-y-5"
       >
         <div>
-          <label className="block text-white text-sm mb-2">Email</label>
+          <label className="block text-foreground text-sm mb-2">Email</label>
           <input
             type="text"
             name="email"
@@ -85,7 +85,7 @@ function LoginForm() {
           />
         </div>
         <div className="relative">
-          <label className="block text-white text-sm mb-2">Password</label>
+          <label className="block dark:text-white text-sm mb-2">Password</label>
           <input
             type={showPassword ? "text" : "password"}
             name="password"
@@ -144,7 +144,7 @@ function LoginForm() {
           {loggingIn ? "Logging In..." : "Log In"}
         </button>
       </form>
-      <h2 className="text-center text-[#F5F7FA] text-base mt-6">
+      <h2 className="text-center dark:text-[#F5F7FA] text-base mt-6">
         Don’t have an account?{" "}
         <Link className="text-[#94A3B8] hover:underline" href="/auth/register">
           Click here

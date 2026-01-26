@@ -67,11 +67,11 @@ function RegisterForm() {
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] px-2 border-2 rounded-md py-8">
       <h2
-        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+        className={`text-5xl md:text-6xl text-foreground text-center font-light tracking-wide ${notoSerif.className}`}
       >
         Sign Up
       </h2>
-      <p className="pt-4 pb-4 text-center text-lg text-[#F8FAFC]">
+      <p className="pt-4 pb-4 text-center text-lg text-foreground">
         Create your account
       </p>
       <form
@@ -79,7 +79,7 @@ function RegisterForm() {
         className="mx-auto w-full max-w-md space-y-5"
       >
         <div>
-          <label className="block text-white text-sm mb-2">Email</label>
+          <label className="block text-foreground text-sm mb-2">Email</label>
           <input
             type="text"
             name="email"
@@ -89,7 +89,7 @@ function RegisterForm() {
         </div>
 
         <div className="relative">
-          <label className="block text-white text-sm mb-2">Password</label>
+          <label className="block text-foreground text-sm mb-2">Password</label>
           <input
             type={showPass1 ? "text" : "password"}
             name="password"
@@ -141,7 +141,7 @@ function RegisterForm() {
         </div>
 
         <div className="relative">
-          <label className="block text-white text-sm mb-2">
+          <label className="block text-foreground text-sm mb-2">
             Confirm Password
           </label>
           <input
@@ -203,7 +203,7 @@ function RegisterForm() {
         </button>
       </form>
 
-      <h2 className="text-center text-[#F5F7FA] text-base mt-6">
+      <h2 className="text-center text-foreground text-base mt-6">
         Already have an account?{" "}
         <Link className="text-[#94A3B8] hover:underline" href="/auth/login">
           Click here

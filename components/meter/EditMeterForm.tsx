@@ -77,11 +77,11 @@ function EditMeterForm() {
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] border-2 rounded-md px-2 py-8 mx-auto">
       <h2
-        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+        className={`text-5xl md:text-6xl text-foreground text-center font-light tracking-wide ${notoSerif.className}`}
       >
         Update meter info
       </h2>
-      <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
+      <p className="pt-4 pb-8 text-center text-lg text-foreground">
         Update your meter information
       </p>
       <form
@@ -89,7 +89,7 @@ function EditMeterForm() {
         className="mx-auto w-full max-w-md space-y-5"
       >
         <div>
-          <label className="block text-white text-sm mb-2">Name</label>
+          <label className="block text-foreground text-sm mb-2">Name</label>
           <input
             type="text"
             name="name"
@@ -99,18 +99,18 @@ function EditMeterForm() {
           />
         </div>
         <div>
-          <label className="block text-white text-sm mb-2">Meter No.</label>
+          <label className="block text-foreground text-sm mb-2">Meter No.</label>
           <input
             defaultValue={meter?.meterNo}
             disabled
             type="text"
             name="meterNo"
             placeholder="Enter your meter no."
-            className="w-full h-12 rounded-lg bg-[#6B6B6B] border border-[#6B6B6B] px-4 outline-0 text-black cursor-not-allowed"
+            className="w-full h-12 rounded-lg dark:bg-gray-400 bg-gray-300 border border-[#6B6B6B] px-4 outline-0 text-black cursor-not-allowed"
           />
         </div>
         <div>
-          <label className="block text-white text-sm mb-2">Threshold</label>
+          <label className="block text-foreground text-sm mb-2">Threshold</label>
           <input
             defaultValue={meter?.threshold}
             type="number"

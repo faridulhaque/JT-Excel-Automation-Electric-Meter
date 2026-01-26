@@ -61,11 +61,11 @@ function AddForm() {
   return (
     <div className="flex flex-col justify-center h-full w-11/12 md:w-3/5 lg:w-1/2 border-[#3B82F6] px-2 border-2 rounded-md py-8 mx-auto">
       <h2
-        className={`text-5xl md:text-6xl text-[#F8FAFC] text-center font-light tracking-wide ${notoSerif.className}`}
+        className={`text-5xl md:text-6xl text-foreground text-center font-light tracking-wide ${notoSerif.className}`}
       >
         Add a new meter
       </h2>
-      <p className="pt-4 pb-8 text-center text-lg text-[#F8FAFC]">
+      <p className="pt-4 pb-8 text-center text-lg text-foreground">
         Enter your meter information
       </p>
       <form
@@ -73,7 +73,7 @@ function AddForm() {
         className="mx-auto w-full max-w-md space-y-5"
       >
         <div>
-          <label className="block text-white text-sm mb-2">Name</label>
+          <label className="block text-foreground text-sm mb-2">Name</label>
           <input
             type="text"
             name="name"
@@ -82,7 +82,7 @@ function AddForm() {
           />
         </div>
         <div>
-          <label className="block text-white text-sm mb-2">Meter No.</label>
+          <label className="block text-foreground text-sm mb-2">Meter No.</label>
           <input
             type="number"
             name="meterNo"
@@ -91,7 +91,7 @@ function AddForm() {
           />
         </div>
         <div>
-          <label className="block text-white text-sm mb-2">Threshold</label>
+          <label className="block text-foreground text-sm mb-2">Threshold</label>
           <input
             type="text"
             name="threshold"
