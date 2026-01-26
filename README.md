@@ -33,7 +33,7 @@
 - JWT
 - NeonDB (SQL)
 - MailJet
-- cronjob.org (for scheduled email sending)
+- cronjob.org (A daily cron job is configured via cronjob.org to trigger a dedicated alert API. This API checks meter balances and sends real alert emails when the balance falls below the configured threshold.)
 
 ## 🧑‍💻 Test Credentials
 
