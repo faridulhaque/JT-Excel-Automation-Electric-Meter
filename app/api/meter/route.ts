@@ -79,7 +79,7 @@ export async function PUT(request: Request) {
         status: 401,
         message: "Unauthorized",
       });
-   
+
     const body: TMeterData = await request.json();
 
     const updated = await prisma.meter.update({
@@ -92,13 +92,13 @@ export async function PUT(request: Request) {
       },
     });
     if (updated)
-     return NextResponse.json({
+      return NextResponse.json({
         status: 200,
         data: updated,
         message: "Meter updated successfully",
       });
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error);
     return NextResponse.json({
       status: 500,
       message: "Internal server error",
@@ -119,7 +119,10 @@ export async function GET(request: Request) {
       process.env.JWT_SECRET as string,
     ) as { id: string };
 
-    const data = await prisma.meter.findMany({ where: { userId: id } });
+    const data = await prisma.meter.findMany({
+      where: { userId: id },
+      orderBy: { name: "desc" },
+    });
     return NextResponse.json({
       status: 200,
       data: data,
