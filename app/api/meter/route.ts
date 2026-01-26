@@ -121,7 +121,7 @@ export async function GET(request: Request) {
 
     const data = await prisma.meter.findMany({
       where: { userId: id },
-      orderBy: { name: "desc" },
+      orderBy: { name: "asc" },
     });
     return NextResponse.json({
       status: 200,
